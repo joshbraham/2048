@@ -1,7 +1,8 @@
 """ Main script for the 2048 application """
 import random
 
-Pos = tuple[int, int]
+
+Pos = tuple[int, int]  # Type alias for Board matrix positions
 
 
 class Board:
@@ -197,11 +198,10 @@ class Board:
         while True:
             direction = input(prompt).upper()
             if direction in ("W", "A", "S", "D"):
-                break
+                return direction
             print(
                 "Invalid direction! Enter 'W' for UP, 'A' for LEFT, 'S' for DOWN, 'D' for RIGHT (case insensitive)"
             )
-        return direction
 
 
 def main():
