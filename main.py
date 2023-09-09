@@ -12,15 +12,15 @@ class Board:
     Parameter <j> maps to an x-axis value
     """
 
-    def __init__(self, size):
+    def __init__(self, size: int):
         """
         Construct a new <size>x<size> grid with 2 randomly set cells (each value 2)
         """
+        self.has_2048 = False
         self._size = size
         self._matrix = [[None] * size for _ in range(size)]
-        self.has_2048 = False
 
-        self._empty_cells = set()
+        self._empty_cells: set[Pos] = set()
         for i in range(size):
             for j in range(size):
                 self._empty_cells.add((i, j))
@@ -191,17 +191,35 @@ class Board:
             self.set_random_empty_cell()
 
     @staticmethod
-    def get_direction(prompt="COLLAPSE (WASD) "):
+    def get_direction():
         """
         Continuously prompt input from user until valid input is entered
         """
         while True:
-            direction = input(prompt).upper()
+            direction = input("COLLAPSE (WASD) ").upper()
             if direction in ("W", "A", "S", "D"):
                 return direction
             print(
                 "Invalid direction! Enter 'W' for UP, 'A' for LEFT, 'S' for DOWN, 'D' for RIGHT (case insensitive)"
             )
+
+
+def prompt_encore():
+    """
+    Post-game code that asks if the user would like another game
+    """
+    print()
+
+    while True:
+        input_ = input("Would you like another game? (Y/N) ").upper()
+        if input_ == "Y":
+            print()
+            main()
+        elif input_ == "N":
+            print("Goodbye!")
+            exit()
+        else:
+            print("Please enter 'Y' or 'N' (case insensitive)")
 
 
 def main():
@@ -215,11 +233,13 @@ def main():
             print("\n--------- YOU WIN! ---------")
             break
         if not b.is_playable:
-            print("\nNo further moves can be made.\n--------- GAME OVER ---------")
+            print("\nNo further moves can be made.")
+            print("--------- GAME OVER ---------")
             break
-        direction = Board.get_direction()
-        b.collapse_board(direction)
+        b.collapse_board(Board.get_direction())
         print()
+
+    prompt_encore()
 
 
 if __name__ == "__main__":
